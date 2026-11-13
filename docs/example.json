@@ -1,0 +1,69 @@
+{
+  "tasks": [
+    {
+      "id": "brief",
+      "label": "Agree on scope",
+      "duration": 2,
+      "depends": []
+    },
+    {
+      "id": "design",
+      "label": "Design the interface",
+      "duration": 4,
+      "depends": [
+        "brief"
+      ]
+    },
+    {
+      "id": "schema",
+      "label": "Define data contracts",
+      "duration": 3,
+      "depends": [
+        "brief"
+      ]
+    },
+    {
+      "id": "api",
+      "label": "Implement API",
+      "duration": 9,
+      "depends": [
+        "schema"
+      ]
+    },
+    {
+      "id": "ui",
+      "label": "Build the interface",
+      "duration": 5,
+      "depends": [
+        "design",
+        "schema"
+      ]
+    },
+    {
+      "id": "integrate",
+      "label": "Integrate & verify",
+      "duration": 3,
+      "depends": [
+        "api",
+        "ui"
+      ]
+    },
+    {
+      "id": "docs",
+      "label": "Write operator guide",
+      "duration": 2,
+      "depends": [
+        "schema"
+      ]
+    },
+    {
+      "id": "launch",
+      "label": "Release milestone",
+      "duration": 0,
+      "depends": [
+        "integrate",
+        "docs"
+      ]
+    }
+  ]
+}

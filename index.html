@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Path & Parcel</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <a href="#">path <i>&</i> parcel</a><span>DEPENDENCIES / DELIVERY</span
+      ><label class="upload">Open project<input id="file" type="file" accept=".json" /></label>
+    </header>
+    <main>
+      <section class="intro">
+        <p class="eyebrow">A SMALL ATLAS OF WHAT COMES NEXT</p>
+        <h1>Find the work<br />that moves the date.</h1>
+        <p>
+          Map dependencies. Understand breathing room.<br />Make a change, then see what actually
+          shifts.
+        </p>
+      </section>
+      <section class="toolbar">
+        <label
+          >Example<select id="example">
+            <option value="launch">Product release</option>
+            <option value="diamond">Two equally long routes</option>
+          </select></label
+        ><button id="add">+ Add task</button><button id="baseline">Keep comparison baseline</button
+        ><button id="reset" disabled>Restore baseline</button
+        ><button id="save">Save project</button>
+      </section>
+      <p id="status" role="status" aria-live="polite"></p>
+      <section class="metrics" aria-label="Project summary">
+        <div>
+          <span>Earliest finish</span><strong id="finish">—</strong
+          ><small>elapsed time units</small>
+        </div>
+        <div>
+          <span>Critical routes</span><strong id="paths">—</strong
+          ><small>source-to-delivery paths</small>
+        </div>
+        <div>
+          <span>Change from baseline</span><strong id="delta">—</strong
+          ><small id="baseline-note">Keep a baseline to compare</small>
+        </div>
+      </section>
+      <section id="results" hidden>
+        <div class="section-title">
+          <h2>The delivery map</h2>
+          <p>Solid: work · dotted: total float · terracotta: critical</p>
+        </div>
+        <div class="chart">
+          <svg id="timeline" role="img" aria-label="Task schedule and slack"></svg>
+        </div>
+        <p id="route" class="route"></p>
+        <div class="section-title">
+          <h2>The details that change a date</h2>
+          <button id="csv">Export schedule CSV</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Earliest</th>
+                <th>Latest</th>
+                <th>Total float</th>
+                <th>Free float</th>
+                <th>Save 1 unit → project saves</th>
+              </tr>
+            </thead>
+            <tbody id="ledger"></tbody>
+          </table>
+        </div>
+        <p class="note">
+          One-unit savings change one task at a time. Parallel critical routes can make an
+          individual reduction ineffective. Float values are not independent budgets that can all be
+          spent together.
+        </p>
+      </section>
+      <section>
+        <div class="section-title">
+          <h2>Your task cards</h2>
+          <p>Dependencies use IDs, separated by commas.</p>
+        </div>
+        <div id="cards"></div>
+      </section>
+      <details>
+        <summary>How to read this plan</summary>
+        <p>
+          Time starts at zero. Dependencies are finish-to-start with no lag. Durations are whole
+          time units; zero-duration milestones are supported. Resources are unlimited, so
+          independent tasks can overlap. Weekends, calendars, uncertain durations, and staff limits
+          are not modeled.
+        </p>
+        <p>
+          Total float is how far a task can move before the overall finish moves, with other
+          durations fixed. Free float is how far it can move without delaying the earliest start of
+          an immediate successor. A critical task has zero total float. The latest schedule uses the
+          earliest possible project finish as its deadline.
+        </p>
+        <p>
+          The app rejects cycles with a closed dependency witness. It counts all longest
+          source-to-sink routes, including distinct zero-duration milestone routes. The displayed
+          route is one example, not the only route.
+        </p>
+        <p>
+          Files contain a single <code>tasks</code> array. Each task has <code>id</code>,
+          <code>label</code>, <code>duration</code>, and <code>depends</code>. Up to 64 tasks;
+          duration 0–10,000. Everything stays in your browser. Save before refreshing.
+        </p>
+      </details>
+      <footer>
+        FINITE PLANS. VISIBLE ASSUMPTIONS. <button id="report">Export analysis JSON</button>
+      </footer>
+    </main>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
