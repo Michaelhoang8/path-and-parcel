@@ -4,6 +4,8 @@ An interactive dependency planner that explains which work determines a delivery
 
 ![Path & Parcel](docs/workbench.png)
 
+The schedule is the main workspace. Click a task bar, activate it from the keyboard, or use **Edit tasks** to open a single-task editor. **Add task** opens the new record immediately; edits recalculate the plan automatically. Baseline comparison stays above the timeline, while float and sensitivity details expand below it.
+
 ## Run
 
 Requires Python 3.10+. No runtime dependencies or API keys.

@@ -8,25 +8,18 @@
   </head>
   <body>
     <header>
-      <a href="#">path <i>&</i> parcel</a><span>DEPENDENCIES / DELIVERY</span
-      ><label class="upload">Open project<input id="file" type="file" accept=".json" /></label>
+      <h1>Path &amp; Parcel</h1>
+      <label class="upload">Open project<input id="file" type="file" accept=".json" /></label>
     </header>
     <main>
-      <section class="intro">
-        <p class="eyebrow">A SMALL ATLAS OF WHAT COMES NEXT</p>
-        <h1>Find the work<br />that moves the date.</h1>
-        <p>
-          Map dependencies. Understand breathing room.<br />Make a change, then see what actually
-          shifts.
-        </p>
-      </section>
       <section class="toolbar">
         <label
           >Example<select id="example">
             <option value="launch">Product release</option>
             <option value="diamond">Two equally long routes</option>
           </select></label
-        ><button id="add">+ Add task</button><button id="baseline">Keep comparison baseline</button
+        ><button id="add">Add task</button><button id="tasks-open">Edit tasks</button
+        ><button id="baseline">Set baseline</button
         ><button id="reset" disabled>Restore baseline</button
         ><button id="save">Save project</button>
       </section>
@@ -47,45 +40,42 @@
       </section>
       <section id="results" hidden>
         <div class="section-title">
-          <h2>The delivery map</h2>
+          <h2>Schedule</h2>
           <p>Solid: work · dotted: total float · terracotta: critical</p>
         </div>
         <div class="chart">
-          <svg id="timeline" role="img" aria-label="Task schedule and slack"></svg>
+          <svg id="timeline" role="group" aria-label="Task schedule and slack"></svg>
         </div>
         <p id="route" class="route"></p>
-        <div class="section-title">
-          <h2>The details that change a date</h2>
-          <button id="csv">Export schedule CSV</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Task</th>
-                <th>Earliest</th>
-                <th>Latest</th>
-                <th>Total float</th>
-                <th>Free float</th>
-                <th>Save 1 unit → project saves</th>
-              </tr>
-            </thead>
-            <tbody id="ledger"></tbody>
-          </table>
-        </div>
-        <p class="note">
-          One-unit savings change one task at a time. Parallel critical routes can make an
-          individual reduction ineffective. Float values are not independent budgets that can all be
-          spent together.
-        </p>
+        <details>
+          <summary>Float &amp; sensitivity</summary>
+          <div class="section-title">
+            <h2>Schedule details</h2>
+            <button id="csv">Export schedule CSV</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Task</th>
+                  <th>Earliest</th>
+                  <th>Latest</th>
+                  <th>Total float</th>
+                  <th>Free float</th>
+                  <th>Save 1 unit → project saves</th>
+                </tr>
+              </thead>
+              <tbody id="ledger"></tbody>
+            </table>
+          </div>
+          <p class="note">
+            One-unit savings change one task at a time. Parallel critical routes can make an
+            individual reduction ineffective. Float values are not independent budgets that can all
+            be spent together.
+          </p>
+        </details>
       </section>
-      <section>
-        <div class="section-title">
-          <h2>Your task cards</h2>
-          <p>Dependencies use IDs, separated by commas.</p>
-        </div>
-        <div id="cards"></div>
-      </section>
+
       <details>
         <summary>How to read this plan</summary>
         <p>
@@ -112,9 +102,21 @@
         </p>
       </details>
       <footer>
-        FINITE PLANS. VISIBLE ASSUMPTIONS. <button id="report">Export analysis JSON</button>
+        <button id="report">Export analysis JSON</button>
       </footer>
     </main>
+    <dialog id="task-editor" aria-labelledby="editor-title">
+      <div class="dialog-head">
+        <h2 id="editor-title">Edit task</h2>
+        <button id="tasks-close">Close</button>
+      </div>
+      <label>Task<select id="task-picker"></select></label>
+      <div id="cards"></div>
+      <p class="note">
+        Dependencies use IDs, separated by commas. Changes update the schedule automatically.
+      </p>
+      <p id="editor-status" role="status"></p>
+    </dialog>
     <script type="module" src="app.js"></script>
   </body>
 </html>

@@ -5,7 +5,8 @@ let tasks = fixture(),
   baseline = null,
   result = null,
   worker = null,
-  revision = 0;
+  revision = 0,
+  activeTask = null;
 const el = (name, text) => {
   const n = document.createElement(name);
   if (text !== undefined) n.textContent = text;
@@ -13,6 +14,7 @@ const el = (name, text) => {
 };
 function status(text) {
   $('status').textContent = text;
+  $('editor-status').textContent = text;
 }
 function invalidate() {
   revision++;
@@ -67,11 +69,28 @@ function field(label, value, type = 'text') {
   wrap.append(input);
   return [wrap, input];
 }
+function selectTask(id) {
+  activeTask = id;
+  $('task-picker').value = id;
+  for (const card of $('cards').children) card.hidden = card.dataset.task !== id;
+}
+function openTask(id = activeTask || tasks[0].id) {
+  selectTask(id);
+  if (!$('task-editor').open) $('task-editor').showModal();
+}
+$('task-picker').addEventListener('change', () => selectTask($('task-picker').value));
+$('tasks-open').addEventListener('click', () => openTask());
+$('tasks-close').addEventListener('click', () => $('task-editor').close());
 function cards() {
   $('cards').replaceChildren();
+  $('task-picker').replaceChildren();
   for (const task of tasks) {
     const card = el('article');
     card.className = 'card';
+    card.dataset.task = task.id;
+    const option = el('option', `${task.id} · ${task.label}`);
+    option.value = task.id;
+    $('task-picker').append(option);
     const head = el('div');
     head.className = 'card-head';
     head.append(el('code', task.id));
@@ -97,6 +116,7 @@ function cards() {
     li.setAttribute('aria-label', `${task.id} name`);
     li.addEventListener('input', () => {
       task.label = li.value;
+      option.textContent = `${task.id} · ${task.label}`;
       compute();
     });
     card.append(lw);
@@ -121,6 +141,8 @@ function cards() {
     card.append(pair);
     $('cards').append(card);
   }
+  if (!tasks.some((t) => t.id === activeTask)) activeTask = tasks[0].id;
+  selectTask(activeTask);
   $('add').disabled = tasks.length >= 64;
 }
 function svg(name, attrs, text) {
@@ -193,6 +215,17 @@ function render() {
     bar.append(
       svg('title', {}, `${t.label}: ${t.earlyStart}–${t.earlyFinish}; total float ${t.totalFloat}`),
     );
+    bar.setAttribute('role', 'button');
+    bar.setAttribute('tabindex', '0');
+    bar.setAttribute('aria-label', `Edit ${t.id}: ${t.label}`);
+    bar.classList.add('task-bar');
+    bar.addEventListener('click', () => openTask(t.id));
+    bar.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        openTask(t.id);
+      }
+    });
     root.append(bar);
   });
   $('route').textContent =
@@ -243,6 +276,7 @@ $('add').addEventListener('click', () => {
   while (tasks.some((t) => t.id === `task${i}`)) i++;
   tasks.push({ id: `task${i}`, label: 'New task', duration: 1, depends: [] });
   cards();
+  openTask(`task${i}`);
   compute();
 });
 $('baseline').addEventListener('click', () => {
